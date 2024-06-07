@@ -9,6 +9,12 @@ const SearchSection = () => {
 
   const handleSearchCourse = () => {
     setResult([]);
+    
+
+    if(query.trim() == ""){
+      alert("Please enter your query!");
+      return
+    }
     setIsSearchingActive(true);
 
     fetch(`${BASE_URL}/search-course`, {
@@ -24,19 +30,24 @@ const SearchSection = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        if(data.status == "success"){
+          console.log(data);
         setResult([data.data]);
         setIsSearchingActive(false);
+        } else{
+          setIsSearchingActive(false);
+        }
+        
       })
       .catch((error) => {
         console.log(error);
+        setIsSearchingActive(false);
       });
   };
 
   const headline = (str) => {
     return <div dangerouslySetInnerHTML={{ __html: str }} />;
   };
-
 
   function roundUpToDecimalPlaces(num, decimalPlaces) {
     const factor = Math.pow(10, decimalPlaces);
@@ -45,7 +56,8 @@ const SearchSection = () => {
 
   return (
     <>
-      <div className="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto font-[sans-serif] mt-20 mb-20">
+    <h3 className="md:text-3xl text-2xl md:leading-10 font-semibold text-center mt-20">Find Courses here</h3>
+      <div className="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto font-[sans-serif] mt-10 mb-20">
         <input
           type="email"
           placeholder="Search for anything..."
@@ -58,14 +70,15 @@ const SearchSection = () => {
           type="button"
           className="bg-blue-600 hover:bg-blue-700 transition-all text-white text-sm rounded-full px-5 py-2.5"
           onClick={handleSearchCourse}
+          disabled={isSearchingActive ? true : false}
         >
-          Search
+          {isSearchingActive ? "Searching..." : "Search"}
         </button>
       </div>
 
       {isSearchingActive ? (
         <>
-          <div role="status" className="flex justify-center mx-auto">
+          <div role="status" className="flex justify-center mx-auto mb-10">
             <svg
               aria-hidden="true"
               className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -92,9 +105,15 @@ const SearchSection = () => {
               {result[0].courses.map((course, idx) => (
                 <div
                   key={idx}
-                  className="popper-module--popper--mM5Ie ud-popper-open flex justify-center mx-auto container"
+                  className="popper-module--popper--mM5Ie ud-popper-open flex justify-center mx-auto container mb-20"
                 >
                   <div className="prefetching-wrapper-module--prefetching-wrapper--h55SO">
+                    <link
+                      data-testid="view-prefetch"
+                      rel="prefetch"
+                      href={`https://www.udemy.com${course.url}`}
+                      as="document"
+                    />
                     <div
                       id="u25-popper-trigger--545"
                       aria-expanded="true"
@@ -103,23 +122,31 @@ const SearchSection = () => {
                       data-purpose="container"
                     >
                       <div className="course-card-module--image-container--o-meJ">
-                        <img
-                          src={course.image_240x135}
-                          alt=""
-                          className="course-card-image-module--image--dfkFe course-card-module--course-image--Bwpco browse-course-card-module--image--TAyXN"
-                          width="260"
-                          height="145"
-                          loading="lazy"
-                        />
+                        <a
+                          href={`https://www.udemy.com${course.url}`}
+                          target="_blank"
+                        >
+                          <img
+                            src={course.image_240x135}
+                            alt=""
+                            className="course-card-image-module--image--dfkFe course-card-module--course-image--Bwpco browse-course-card-module--image--TAyXN"
+                            width="260"
+                            height="145"
+                            loading="lazy"
+                          />
+                        </a>
                       </div>
                       <div className="course-card-module--main-content--pEiUr course-card-module--has-price-text--g6p85">
                         <div>
                           <div className="course-card-title-module--title--W49Ap">
                             <h3
                               data-purpose="course-title-url"
-                              className="ud-heading-md course-card-title-module--course-title--wmFXN"
+                              className="ud-heading-md course-card-title-module--course-title--wmFXN text-2xl"
                             >
-                              <a href="/course/100-days-of-code/">
+                              <a
+                                href={`https://www.udemy.com${course.url}`}
+                                target="_blank"
+                              >
                                 {course.title}
                                 <div className="ud-sr-only" aria-hidden="true">
                                   <span data-testid="seo-headline">
@@ -135,22 +162,23 @@ const SearchSection = () => {
                                     {course.content_info}
                                   </span>
                                   <span data-testid="seo-num-lectures">
-                                    636 lectures
+                                    {course.num_published_lectures +
+                                      " lectures"}
                                   </span>
                                   <span data-testid="seo-instructional-level">
-                                    All Levels
+                                    {course.instructional_level_simple}
                                   </span>
                                   <span data-testid="seo-current-price">
-                                  Current price: €84.99
-                                </span>
-
+                                    Current price:{" "}
+                                    {course.price.price.price_string}
+                                  </span>
                                 </div>
                               </a>
                             </h3>
                           </div>
                         </div>
                         <p
-                          className="ud-text-sm course-card-module--course-headline--v-7gj"
+                          className="ud-text-sm course-card-module--course-headline--v-7gj text-base"
                           data-purpose="safely-set-inner-html:course-card:course-headline"
                           data-testid="safely-set-inner-html:course-card:course-headline"
                         >
@@ -159,7 +187,7 @@ const SearchSection = () => {
                         <div className="ud-text-xs">
                           <span className="ud-sr-only">Instructors:</span>
                           <div
-                            className="course-card-instructors-module--instructor-list--cJTfw"
+                            className="course-card-instructors-module--instructor-list--cJTfw text-base"
                             data-purpose="safely-set-inner-html:course-card:visible-instructors"
                             data-testid="safely-set-inner-html:course-card:visible-instructors"
                           >
@@ -174,7 +202,7 @@ const SearchSection = () => {
                               Rating: {Math.ceil(course.rating)} out of 5
                             </span>
                             <span
-                              className="ud-heading-sm star-rating-module--rating-number--2-qA2"
+                              className="ud-heading-sm star-rating-module--rating-number--2-qA2 text-base"
                               aria-hidden="true"
                               data-purpose="rating-number"
                             >
@@ -210,31 +238,76 @@ const SearchSection = () => {
                                   width="14"
                                   height="14"
                                   x="0"
-                                ></use>
+                                >
+                                  <svg
+                                    id="icon-rating-star"
+                                    viewBox="0 0 24 24"
+                                    width="14"
+                                    height="14"
+                                  >
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
+                                  </svg>
+                                </use>
                                 <use
                                   xlinkHref="#icon-rating-star"
                                   width="14"
                                   height="14"
                                   x="14"
-                                ></use>
+                                >
+                                  <svg
+                                    id="icon-rating-star"
+                                    viewBox="0 0 24 24"
+                                    width="14"
+                                    height="14"
+                                  >
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
+                                  </svg>
+                                </use>
                                 <use
                                   xlinkHref="#icon-rating-star"
                                   width="14"
                                   height="14"
                                   x="28"
-                                ></use>
+                                >
+                                  <svg
+                                    id="icon-rating-star"
+                                    viewBox="0 0 24 24"
+                                    width="14"
+                                    height="14"
+                                  >
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
+                                  </svg>
+                                </use>
                                 <use
                                   xlinkHref="#icon-rating-star"
                                   width="14"
                                   height="14"
                                   x="42"
-                                ></use>
+                                >
+                                  <svg
+                                    id="icon-rating-star"
+                                    viewBox="0 0 24 24"
+                                    width="14"
+                                    height="14"
+                                  >
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
+                                  </svg>
+                                </use>
                                 <use
                                   xlinkHref="#icon-rating-star"
                                   width="14"
                                   height="14"
                                   x="56"
-                                ></use>
+                                >
+                                  <svg
+                                    id="icon-rating-star"
+                                    viewBox="0 0 24 24"
+                                    width="14"
+                                    height="14"
+                                  >
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
+                                  </svg>
+                                </use>
                               </g>
                               <g
                                 fill="transparent"
@@ -282,9 +355,9 @@ const SearchSection = () => {
                           </span>
                           <span
                             aria-label="300179 reviews"
-                            className="ud-text-xs course-card-ratings-module--reviews-text--1z0l4"
+                            className="ud-text-xs course-card-ratings-module--reviews-text--1z0l4 text-base"
                           >
-                            {"("+course.num_reviews+")"}
+                            {"(" + course.num_reviews + ")"}
                           </span>
                         </div>
                         <div className="course-card-details-module--row--jw-lD">
@@ -292,20 +365,19 @@ const SearchSection = () => {
                             data-purpose="course-meta-info"
                             className="course-card-details-module--row--jw-lD course-card-details-module--course-meta-info--2bDQt ud-text-xs"
                           >
-                            <span className="course-card-details-module--row--jw-lD">
+                            <span className="course-card-details-module--row--jw-lD text-base">
                               {course.content_info}
                             </span>
-                            <span className="course-card-details-module--row--jw-lD">
-                              636 lectures
+                            <span className="course-card-details-module--row--jw-lD text-base">
+                              {course.num_published_lectures + " lectures"}
                             </span>
-                            <span className="course-card-details-module--row--jw-lD">
-                              All Levels
+                            <span className="course-card-details-module--row--jw-lD text-base">
+                              {course.instructional_level_simple}
                             </span>
-
                           </div>
                         </div>
                         <div className="course-card-module--price-text-container--2TRvR">
-                        <div
+                          <div
                             className="base-price-text-module--container--Sfv-5 course-card-module--price-text-base-price-text-component--Q-Ucg"
                             data-purpose="price-text-container"
                           >
@@ -315,20 +387,26 @@ const SearchSection = () => {
                             >
                               <span className="ud-sr-only">Current price</span>
                               <span>
-                              <span>€84.99</span>
-                            </span>
+                                <span className="text-xl">
+                                  {course.price.price.price_string}
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
-                        <div className="course-card-module--badges-container--YDhzE">
-                          <div className="browse-course-card-module--wrapped-course-badges--1Yyi1">
-                            <div className="course-card-badges-module--course-badges--NtSTO">
-                              <div className="ud-badge ud-heading-xs course-badges-module--bestseller--JKaT4">
-                                Bestseller
+                        {course.badges.length > 0 ? (
+                          <div className="course-card-module--badges-container--YDhzE">
+                            <div className="browse-course-card-module--wrapped-course-badges--1Yyi1">
+                              <div className="course-card-badges-module--course-badges--NtSTO">
+                                <div className="ud-badge ud-heading-xs course-badges-module--bestseller--JKaT4 text-base">
+                                  {course.badges[0].badge_text}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   </div>

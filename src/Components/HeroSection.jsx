@@ -8,8 +8,8 @@ const HeroSection = () => {
           <img src="https://blog.hubspot.com/hubfs/freeonlinecourses-1.webp" className="w-full h-full object-contain" />
         </div>
         <div className="max-md:text-center">
-          <h3 className="md:text-3xl text-2xl md:leading-10">Prompt Delivery and Enjoyable Dining Experience.</h3>
-          <p className="mt-6 text-sm">Laboris qui Lorem ad tempor ut reprehenderit. Nostrud anim nulla officia ea sit deserunt. Eu eu quis anim aute Laboris qui Lorem ad tempor ut reprehenderit.</p>
+          <h3 className="md:text-3xl text-2xl md:leading-10">Discover Your Next Learning Adventure with CourseFinder.</h3>
+          <p className="mt-6 text-sm">Unlock a world of knowledge with our extensive collection of online courses. Whether you're looking to advance your career, learn a new hobby, or gain new skills, CourseFinder has the perfect course for you.</p>
           <button type="button" className="px-6 py-2 mt-8 font-semibold rounded text-sm outline-none border-2 border-white">Explore</button>
         </div>
       </div>
