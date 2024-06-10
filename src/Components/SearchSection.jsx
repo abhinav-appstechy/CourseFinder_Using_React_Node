@@ -31,7 +31,7 @@ const SearchSection = () => {
       })
       .then((data) => {
         if(data.status == "success"){
-          console.log(data);
+          // console.log(data);
         setResult([data.data]);
         setIsSearchingActive(false);
         } else{

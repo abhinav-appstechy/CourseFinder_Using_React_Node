@@ -43,7 +43,7 @@ function App() {
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          console.log(`${entry.target.getAttribute('data-section-name')} is in view`);
+          // console.log(`${entry.target.getAttribute('data-section-name')} is in view`);
           let hashMap = hashMapOfSection;
           setActiveNav(hashMap[entry.target.getAttribute('data-section-name')]);
           
@@ -70,9 +70,9 @@ function App() {
   }, [sectionRefs]);
 
 
-  useEffect(() => {
-    console.log(activeNav)
-  }, [activeNav])
+  // useEffect(() => {
+  //   console.log(activeNav)
+  // }, [activeNav])
   
 
   return (
