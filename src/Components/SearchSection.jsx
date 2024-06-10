@@ -54,9 +54,69 @@ const SearchSection = () => {
     return Math.ceil(num * factor) / factor;
   }
 
+
+  const starRating = ( rating ) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+    return (
+      <svg
+        aria-hidden="true"
+        width="70"
+        height="14"
+        viewBox="0 0 70 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="half-fill" x1="0" x2="100%" y1="0" y2="0">
+            <stop offset="50%" stopColor="#FFD700" />
+            <stop offset="50%" stopColor="transparent" />
+          </linearGradient>
+          <symbol id="icon-rating-star" viewBox="0 0 24 24" width="14" height="14">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" />
+          </symbol>
+        </defs>
+        <g>
+          {/* Full Stars */}
+          {Array(fullStars).fill().map((_, i) => (
+            <use
+              key={`full-${i}`}
+              xlinkHref="#icon-rating-star"
+              x={i * 14}
+              fill="#FFD700"
+            />
+          ))}
+  
+          {/* Half Star */}
+          {hasHalfStar && (
+            <use
+              xlinkHref="#icon-rating-star"
+              x={fullStars * 14}
+              fill="url(#half-fill)"
+            />
+          )}
+  
+          {/* Empty Stars */}
+          {Array(emptyStars).fill().map((_, i) => (
+            <use
+              key={`empty-${i}`}
+              xlinkHref="#icon-rating-star"
+              x={(fullStars + (hasHalfStar ? 1 : 0) + i) * 14}
+              fill="transparent"
+              strokeWidth="2"
+              stroke="#FFD700"
+            />
+          ))}
+        </g>
+      </svg>
+    );
+  };
+
   return (
     <>
-    <h3 className="md:text-3xl text-2xl md:leading-10 font-semibold text-center mt-20">Find Courses here</h3>
+    <h3 className="md:text-3xl text-2xl md:leading-10 font-semibold text-center mt-20" id="SearchSection">Find Courses here</h3>
       <div className="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto font-[sans-serif] mt-10 mb-20">
         <input
           type="email"
@@ -68,7 +128,7 @@ const SearchSection = () => {
         />
         <button
           type="button"
-          className="bg-blue-600 hover:bg-blue-700 transition-all text-white text-sm rounded-full px-5 py-2.5"
+          className={`${isSearchingActive ? "bg-slate-500 hover:bg-slate-700" : "bg-blue-600 hover:bg-blue-700"}  transition-all text-white text-sm rounded-full px-5 py-2.5`}
           onClick={handleSearchCourse}
           disabled={isSearchingActive ? true : false}
         >
@@ -208,150 +268,7 @@ const SearchSection = () => {
                             >
                               {roundUpToDecimalPlaces(course.rating, 1)}
                             </span>
-                            <svg
-                              aria-hidden="true"
-                              width="100%"
-                              height="100%"
-                              viewBox="0 0 70 14"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <mask
-                                id="u25-star-rating-mask--547"
-                                data-purpose="star-rating-mask"
-                              >
-                                <rect
-                                  x="0"
-                                  y="0"
-                                  width="90%"
-                                  height="100%"
-                                  fill="white"
-                                ></rect>
-                              </mask>
-                              <g
-                                className="star-rating-module--star-filled--FgjdR"
-                                mask="url(#u25-star-rating-mask--547)"
-                                data-purpose="star-filled"
-                              >
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="14"
-                                  height="14"
-                                  x="0"
-                                >
-                                  <svg
-                                    id="icon-rating-star"
-                                    viewBox="0 0 24 24"
-                                    width="14"
-                                    height="14"
-                                  >
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
-                                  </svg>
-                                </use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="14"
-                                  height="14"
-                                  x="14"
-                                >
-                                  <svg
-                                    id="icon-rating-star"
-                                    viewBox="0 0 24 24"
-                                    width="14"
-                                    height="14"
-                                  >
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
-                                  </svg>
-                                </use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="14"
-                                  height="14"
-                                  x="28"
-                                >
-                                  <svg
-                                    id="icon-rating-star"
-                                    viewBox="0 0 24 24"
-                                    width="14"
-                                    height="14"
-                                  >
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
-                                  </svg>
-                                </use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="14"
-                                  height="14"
-                                  x="42"
-                                >
-                                  <svg
-                                    id="icon-rating-star"
-                                    viewBox="0 0 24 24"
-                                    width="14"
-                                    height="14"
-                                  >
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
-                                  </svg>
-                                </use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="14"
-                                  height="14"
-                                  x="56"
-                                >
-                                  <svg
-                                    id="icon-rating-star"
-                                    viewBox="0 0 24 24"
-                                    width="14"
-                                    height="14"
-                                  >
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
-                                  </svg>
-                                </use>
-                              </g>
-                              <g
-                                fill="transparent"
-                                className="star-rating-module--star-bordered--A4SZK"
-                                strokeWidth="2"
-                                data-purpose="star-bordered"
-                              >
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="12"
-                                  height="12"
-                                  x="1"
-                                  y="1"
-                                ></use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="12"
-                                  height="12"
-                                  x="15"
-                                  y="1"
-                                ></use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="12"
-                                  height="12"
-                                  x="29"
-                                  y="1"
-                                ></use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="12"
-                                  height="12"
-                                  x="43"
-                                  y="1"
-                                ></use>
-                                <use
-                                  xlinkHref="#icon-rating-star"
-                                  width="12"
-                                  height="12"
-                                  x="57"
-                                  y="1"
-                                ></use>
-                              </g>
-                            </svg>
+                            {starRating(roundUpToDecimalPlaces(course.rating, 1))}
                           </span>
                           <span
                             aria-label="300179 reviews"

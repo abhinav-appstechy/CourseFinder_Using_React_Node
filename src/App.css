@@ -1,4 +1,8 @@
 /* Course Card */
+
+html{
+  scroll-behavior: smooth;
+}
 .course-list--container--HY2ry > *:not(:last-child) {
   padding-bottom: 1.6rem;
   border-bottom: 1px solid #d1d7dc;

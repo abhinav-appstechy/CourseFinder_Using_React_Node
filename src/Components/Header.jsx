@@ -1,8 +1,8 @@
 import React from "react";
 
-const Header = () => {
+const Header = ({activeNav, setActiveNav}) => {
   return (
-    <header className="shadow-md font-sans tracking-wide relative z-50">
+    <header className="shadow-md font-sans tracking-wide relative z-50 sticky top-0">
       <div className="flex flex-wrap items-center justify-between gap-4 px-10 py-4 bg-white min-h-[70px]">
         <a href="/">
           <svg
@@ -83,8 +83,9 @@ const Header = () => {
             </li>
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <a
-                href="javascript:void(0)"
-                className="hover:text-[#007bff] text-[#007bff] block font-bold text-[15px]"
+                href="#HeroSection"
+                className={`hover:text-[#007bff] ${activeNav == "HeroSection" ? "text-[#007bff]" : ""} block font-bold text-[15px]`}
+                onClick={()=>{setActiveNav("HeroSection")}}
               >
                 Home
               </a>
@@ -92,44 +93,44 @@ const Header = () => {
 
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <a
-                href="javascript:void(0)"
-                className="hover:text-[#007bff] text-[#333] block font-bold text-[15px]"
+                href="#FeatureSection"
+                className={`hover:text-[#007bff] ${activeNav == "FeatureSection" ? "text-[#007bff]" : ""} block font-bold text-[15px]`}
+                onClick={()=>{setActiveNav("FeatureSection")}}
               >
                 Feature
               </a>
             </li>
+           
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <a
-                href="javascript:void(0)"
-                className="hover:text-[#007bff] text-[#333] block font-bold text-[15px]"
-              >
-                Blog
-              </a>
-            </li>
-            <li className="max-lg:border-b max-lg:py-3 px-3">
-              <a
-                href="javascript:void(0)"
-                className="hover:text-[#007bff] text-[#333] block font-bold text-[15px]"
+                href="#AboutSection"
+                className={`hover:text-[#007bff] ${activeNav == "AboutSection" ? "text-[#007bff]" : ""} block font-bold text-[15px]`}
+                onClick={()=>{setActiveNav("AboutSection")}}
               >
                 About
               </a>
             </li>
+
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <a
-                href="javascript:void(0)"
-                className="hover:text-[#007bff] text-[#333] block font-bold text-[15px]"
+                href="#TestimonialsSection"
+                className={`hover:text-[#007bff] ${activeNav == "TestimonialsSection" ? "text-[#007bff]" : ""} block font-bold text-[15px]`}
+                onClick={()=>{setActiveNav("TestimonialsSection")}}
+              >
+                Testimonials
+              </a>
+            </li>
+
+            <li className="max-lg:border-b max-lg:py-3 px-3">
+              <a
+                href="#ContactSection"
+                className={`hover:text-[#007bff] ${activeNav == "ContactSection" ? "text-[#007bff]" : ""} block font-bold text-[15px]`}
+                onClick={()=>{setActiveNav("ContactSection")}}
               >
                 Contact
               </a>
             </li>
-            <li className="max-lg:border-b max-lg:py-3 px-3">
-              <a
-                href="javascript:void(0)"
-                className="hover:text-[#007bff] text-[#333] block font-bold text-[15px]"
-              >
-                Source
-              </a>
-            </li>
+            
           </ul>
         </div>
 
