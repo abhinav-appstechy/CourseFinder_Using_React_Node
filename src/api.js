@@ -1,1 +1,1 @@
-export const BASE_URL="http://localhost:5000"
+export const BASE_URL="https://course-finder-using-react-node-backend.vercel.app"
