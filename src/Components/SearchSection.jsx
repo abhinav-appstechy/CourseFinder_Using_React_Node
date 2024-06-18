@@ -7,7 +7,9 @@ const SearchSection = () => {
   const [result, setResult] = useState([]);
   const [isSearchingActive, setIsSearchingActive] = useState(false);
 
-  const handleSearchCourse = () => {
+  const handleSearchCourse = (e) => {
+    e.preventDefault();
+    
     setResult([]);
     
 
@@ -118,6 +120,7 @@ const SearchSection = () => {
     <>
     <h3 className="md:text-3xl text-2xl md:leading-10 font-semibold text-center mt-20" id="SearchSection">Find Courses here</h3>
       <div className="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto font-[sans-serif] mt-10 mb-20">
+        <form >
         <input
           type="email"
           placeholder="Search for anything..."
@@ -127,13 +130,14 @@ const SearchSection = () => {
           }}
         />
         <button
-          type="button"
+          type="submit"
           className={`${isSearchingActive ? "bg-slate-500 hover:bg-slate-700" : "bg-blue-600 hover:bg-blue-700"}  transition-all text-white text-sm rounded-full px-5 py-2.5`}
           onClick={handleSearchCourse}
           disabled={isSearchingActive ? true : false}
         >
           {isSearchingActive ? "Searching..." : "Search"}
         </button>
+        </form>
       </div>
 
       {isSearchingActive ? (
