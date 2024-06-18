@@ -7,15 +7,12 @@ const SearchSection = () => {
   const [result, setResult] = useState([]);
   const [isSearchingActive, setIsSearchingActive] = useState(false);
 
-  const handleSearchCourse = (e) => {
-    e.preventDefault();
-    
+  const handleSearchCourse = () => {
     setResult([]);
-    
 
-    if(query.trim() == ""){
+    if (query.trim() == "") {
       alert("Please enter your query!");
-      return
+      return;
     }
     setIsSearchingActive(true);
 
@@ -32,19 +29,56 @@ const SearchSection = () => {
         return res.json();
       })
       .then((data) => {
-        if(data.status == "success"){
+        if (data.status == "success") {
           // console.log(data);
-        setResult([data.data]);
-        setIsSearchingActive(false);
-        } else{
+          setResult([data.data]);
+          setIsSearchingActive(false);
+        } else {
           setIsSearchingActive(false);
         }
-        
       })
       .catch((error) => {
         console.log(error);
         setIsSearchingActive(false);
       });
+  };
+
+  const handleSearchCourseAfterEnter = (event) => {
+    if (event.key === "Enter") {
+      setResult([]);
+
+      if (query.trim() == "") {
+        alert("Please enter your query!");
+        return;
+      }
+      setIsSearchingActive(true);
+
+      fetch(`${BASE_URL}/search-course`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: query,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          if (data.status == "success") {
+            // console.log(data);
+            setResult([data.data]);
+            setIsSearchingActive(false);
+          } else {
+            setIsSearchingActive(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsSearchingActive(false);
+        });
+    }
   };
 
   const headline = (str) => {
@@ -56,12 +90,11 @@ const SearchSection = () => {
     return Math.ceil(num * factor) / factor;
   }
 
-
-  const starRating = ( rating ) => {
+  const starRating = (rating) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-  
+
     return (
       <svg
         aria-hidden="true"
@@ -76,21 +109,28 @@ const SearchSection = () => {
             <stop offset="50%" stopColor="#FFD700" />
             <stop offset="50%" stopColor="transparent" />
           </linearGradient>
-          <symbol id="icon-rating-star" viewBox="0 0 24 24" width="14" height="14">
+          <symbol
+            id="icon-rating-star"
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+          >
             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" />
           </symbol>
         </defs>
         <g>
           {/* Full Stars */}
-          {Array(fullStars).fill().map((_, i) => (
-            <use
-              key={`full-${i}`}
-              xlinkHref="#icon-rating-star"
-              x={i * 14}
-              fill="#FFD700"
-            />
-          ))}
-  
+          {Array(fullStars)
+            .fill()
+            .map((_, i) => (
+              <use
+                key={`full-${i}`}
+                xlinkHref="#icon-rating-star"
+                x={i * 14}
+                fill="#FFD700"
+              />
+            ))}
+
           {/* Half Star */}
           {hasHalfStar && (
             <use
@@ -99,18 +139,20 @@ const SearchSection = () => {
               fill="url(#half-fill)"
             />
           )}
-  
+
           {/* Empty Stars */}
-          {Array(emptyStars).fill().map((_, i) => (
-            <use
-              key={`empty-${i}`}
-              xlinkHref="#icon-rating-star"
-              x={(fullStars + (hasHalfStar ? 1 : 0) + i) * 14}
-              fill="transparent"
-              strokeWidth="2"
-              stroke="#FFD700"
-            />
-          ))}
+          {Array(emptyStars)
+            .fill()
+            .map((_, i) => (
+              <use
+                key={`empty-${i}`}
+                xlinkHref="#icon-rating-star"
+                x={(fullStars + (hasHalfStar ? 1 : 0) + i) * 14}
+                fill="transparent"
+                strokeWidth="2"
+                stroke="#FFD700"
+              />
+            ))}
         </g>
       </svg>
     );
@@ -118,9 +160,13 @@ const SearchSection = () => {
 
   return (
     <>
-    <h3 className="md:text-3xl text-2xl md:leading-10 font-semibold text-center mt-20" id="SearchSection">Find Courses here</h3>
+      <h3
+        className="md:text-3xl text-2xl md:leading-10 font-semibold text-center mt-20"
+        id="SearchSection"
+      >
+        Find Courses here
+      </h3>
       <div className="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto font-[sans-serif] mt-10 mb-20">
-        <form >
         <input
           type="email"
           placeholder="Search for anything..."
@@ -128,16 +174,20 @@ const SearchSection = () => {
           onChange={(e) => {
             setQuery(e.target.value);
           }}
+          onKeyDown={handleSearchCourseAfterEnter}
         />
         <button
-          type="submit"
-          className={`${isSearchingActive ? "bg-slate-500 hover:bg-slate-700" : "bg-blue-600 hover:bg-blue-700"}  transition-all text-white text-sm rounded-full px-5 py-2.5`}
+          type="button"
+          className={`${
+            isSearchingActive
+              ? "bg-slate-500 hover:bg-slate-700"
+              : "bg-blue-600 hover:bg-blue-700"
+          }  transition-all text-white text-sm rounded-full px-5 py-2.5`}
           onClick={handleSearchCourse}
           disabled={isSearchingActive ? true : false}
         >
           {isSearchingActive ? "Searching..." : "Search"}
         </button>
-        </form>
       </div>
 
       {isSearchingActive ? (
@@ -272,7 +322,9 @@ const SearchSection = () => {
                             >
                               {roundUpToDecimalPlaces(course.rating, 1)}
                             </span>
-                            {starRating(roundUpToDecimalPlaces(course.rating, 1))}
+                            {starRating(
+                              roundUpToDecimalPlaces(course.rating, 1)
+                            )}
                           </span>
                           <span
                             aria-label="300179 reviews"
